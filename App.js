@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NativeBaseProvider, Heading } from 'native-base';
 import { initializeApp } from 'firebase/app';
 import Constants from 'expo-constants';
+import LoginScreen from './LoginScreen';
 
 // Initialize Firebase
 const firebaseConfig =
@@ -24,8 +25,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Heading>Heading</Heading>
+		<LoginScreen />
         <StatusBar style="auto" />
       </View>
     </NativeBaseProvider>
