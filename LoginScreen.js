@@ -10,15 +10,31 @@ import {
     Text,
     Pressable,
 } from 'native-base';
-import { auth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const LoginScreen = () => {
+const LoginScreen = ({ auth }) => {
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [country, setCountry] = useState();
+    const [phone, setPhone] = useState();
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleAccountCreate = async () => {
         try {
-            await createUserWithEmailAndPassword(auth, 'ljl', 'sajjfelk88Jjk');
+            await createUserWithEmailAndPassword(
+                auth,
+                'shane.zheng@icloud.com',
+                'sajjfelk88Jjk'
+            );
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
     const handleSignIn = () => {};
@@ -32,13 +48,48 @@ const LoginScreen = () => {
             paddingX={6}
         >
             <Heading style={styles.header}>Registration Form</Heading>
-            <Input variant="underlined" placeholder="Name" />
-            <Input variant="underlined" placeholder="Email Address" />
-            <Input variant="underlined" placeholder="Country" />
-            <Input variant="underlined" placeholder="Phone" />
-            <Input variant="underlined" placeholder="Password" />
-            <Checkbox value={true}>{'I accept terms & conditions'}</Checkbox>
-            <Button style={styles.button} onPress={handleAccountCreate}>
+            <Input
+                variant="underlined"
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+            />
+            <Input
+                variant="underlined"
+                placeholder="Email Address"
+                value={email}
+                onChangeText={setEmail}
+            />
+            <Input
+                variant="underlined"
+                placeholder="Country"
+                value={country}
+                onChangeText={setCountry}
+            />
+            <Input
+                variant="underlined"
+                placeholder="Phone"
+                value={phone}
+                onChangeText={setPhone}
+            />
+            <Input
+                variant="underlined"
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                type={!showPassword ? 'password' : 'text'}
+            />
+            <Checkbox value={showPassword} onChange={toggleShowPassword}>
+                {'Show Password'}
+            </Checkbox>
+            <Checkbox value={acceptTerms} onChange={setAcceptTerms}>
+                {'I accept terms & conditions'}
+            </Checkbox>
+            <Button
+                style={styles.button}
+                onPress={handleAccountCreate}
+                disabled={!acceptTerms}
+            >
                 Create Account
             </Button>
             <HStack>

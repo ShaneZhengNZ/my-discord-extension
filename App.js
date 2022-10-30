@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import Constants from 'expo-constants';
 import LoginScreen from './LoginScreen';
 
@@ -15,13 +16,15 @@ const firebaseConfig = {
     appId: Constants.manifest.extra['firebaseAppId'],
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 
 export default function App() {
     return (
         <NativeBaseProvider>
             <View style={styles.container}>
-                <LoginScreen />
+                <LoginScreen auth={auth} />
                 <StatusBar style="auto" />
             </View>
         </NativeBaseProvider>
