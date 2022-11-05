@@ -10,7 +10,10 @@ import {
     Text,
     Pressable,
 } from 'native-base';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithCredential,
+} from 'firebase/auth';
 import auth from './AuthContext';
 
 const LoginScreen = () => {
@@ -21,6 +24,7 @@ const LoginScreen = () => {
     const [phone, setPhone] = useState();
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isSignIn, setIsSignIn] = useState(false);
 
     const handleAccountCreate = async () => {
         try {
@@ -34,7 +38,15 @@ const LoginScreen = () => {
         setShowPassword(!showPassword);
     };
 
-    const handleSignIn = () => {};
+    const toggleSignInStatus = () => {
+        setIsSignIn(!isSignIn);
+        setEmail(null);
+        setPassword(null);
+    };
+
+    const signin = async () => {
+        await signInWithCredential(auth, email, password);
+    };
 
     return (
         <VStack
@@ -44,31 +56,39 @@ const LoginScreen = () => {
             width="100%"
             paddingX={6}
         >
-            <Heading style={styles.header}>Registration Form</Heading>
-            <Input
-                variant="underlined"
-                placeholder="Name"
-                value={name}
-                onChangeText={setName}
-            />
+            <Heading style={styles.header}>
+                {isSignIn ? 'Please Login' : 'Registration Form'}
+            </Heading>
+            {!isSignIn && (
+                <Input
+                    variant="underlined"
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                />
+            )}
             <Input
                 variant="underlined"
                 placeholder="Email Address"
                 value={email}
                 onChangeText={setEmail}
             />
-            <Input
-                variant="underlined"
-                placeholder="Country"
-                value={country}
-                onChangeText={setCountry}
-            />
-            <Input
-                variant="underlined"
-                placeholder="Phone"
-                value={phone}
-                onChangeText={setPhone}
-            />
+            {!isSignIn && (
+                <Input
+                    variant="underlined"
+                    placeholder="Country"
+                    value={country}
+                    onChangeText={setCountry}
+                />
+            )}
+            {!isSignIn && (
+                <Input
+                    variant="underlined"
+                    placeholder="Phone"
+                    value={phone}
+                    onChangeText={setPhone}
+                />
+            )}
             <Input
                 variant="underlined"
                 placeholder="Password"
@@ -79,24 +99,43 @@ const LoginScreen = () => {
             <Checkbox value={showPassword} onChange={toggleShowPassword}>
                 {'Show Password'}
             </Checkbox>
-            <Checkbox value={acceptTerms} onChange={setAcceptTerms}>
-                {'I accept terms & conditions'}
-            </Checkbox>
-            <Button
-                style={styles.button}
-                onPress={handleAccountCreate}
-                disabled={!acceptTerms}
-            >
-                Create Account
-            </Button>
-            <HStack>
-                <Text style={styles.placeholder}>
-                    Already have an account?{' '}
-                </Text>
-                <Pressable onPress={handleSignIn}>
-                    <Text color={'#007ACC'}>Sign in</Text>
-                </Pressable>
-            </HStack>
+            {!isSignIn && (
+                <Checkbox value={acceptTerms} onChange={setAcceptTerms}>
+                    {'I accept terms & conditions'}
+                </Checkbox>
+            )}
+            {!isSignIn && (
+                <Button
+                    style={styles.button}
+                    onPress={handleAccountCreate}
+                    disabled={!acceptTerms}
+                >
+                    Create Account
+                </Button>
+            )}
+            {isSignIn && (
+                <Button style={styles.button} onPress={signin}>
+                    Login
+                </Button>
+            )}
+            {!isSignIn && (
+                <HStack>
+                    <Text style={styles.placeholder}>
+                        Already have an account?{' '}
+                    </Text>
+                    <Pressable onPress={toggleSignInStatus}>
+                        <Text color={'#007ACC'}>Sign in</Text>
+                    </Pressable>
+                </HStack>
+            )}
+            {isSignIn && (
+                <HStack>
+                    <Text style={styles.placeholder}>Need an account ? </Text>
+                    <Pressable onPress={toggleSignInStatus}>
+                        <Text color={'#007ACC'}>Sign Up Now</Text>
+                    </Pressable>
+                </HStack>
+            )}
         </VStack>
     );
 };
