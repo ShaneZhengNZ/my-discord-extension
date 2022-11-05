@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import {
     Heading,
@@ -11,8 +11,9 @@ import {
     Pressable,
 } from 'native-base';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import auth from './AuthContext';
 
-const LoginScreen = ({ auth }) => {
+const LoginScreen = () => {
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -23,11 +24,7 @@ const LoginScreen = ({ auth }) => {
 
     const handleAccountCreate = async () => {
         try {
-            await createUserWithEmailAndPassword(
-                auth,
-                'shane.zheng@icloud.com',
-                'sajjfelk88Jjk'
-            );
+            await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
             console.log(error);
         }
