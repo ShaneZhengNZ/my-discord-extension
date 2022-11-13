@@ -6,9 +6,17 @@ import LoginScreen from './LoginScreen';
 import UserScreen from './UserScreen';
 import LoadingScreen from './LoadingScreen';
 import auth, { AuthContext } from './AuthContext';
+import { registerForPushNotificationsAsync } from 'expo-notifications';
 
 export default function App() {
     const [user, setUser] = useState(undefined);
+    const [token, setToken] = useState(undefined);
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then((token) => {
+            setToken(token);
+        });
+    }, []);
 
     useEffect(() => {
         auth.onAuthStateChanged((authUser) => {
