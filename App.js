@@ -7,6 +7,7 @@ import UserScreen from './UserScreen';
 import LoadingScreen from './LoadingScreen';
 import auth, { AuthContext } from './AuthContext';
 import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 export default function App() {
     const [user, setUser] = useState(undefined);
