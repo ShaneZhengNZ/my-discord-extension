@@ -24,7 +24,7 @@ const LoginScreen = () => {
     const [phone, setPhone] = useState();
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [isSignIn, setIsSignIn] = useState(false);
+    const [isSignIn, setIsSignIn] = useState(true);
 
     const handleAccountCreate = async () => {
         try {
